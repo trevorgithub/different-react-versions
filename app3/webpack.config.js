@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 const deps = require('./package.json').dependencies;
+
 module.exports = {
   entry: './src/index',
   mode: 'development',
@@ -9,7 +10,7 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
-    port: 3001,
+    port: 3003,
   },
   output: {
     publicPath: 'auto',
@@ -35,51 +36,41 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'app1',
-      library: { type: 'var', name: 'app1' },
-      remotes: {
-        app2: 'app2',
-        app3: 'app3',
+      name: 'app3',
+      library: { type: 'var', name: 'app3' },
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Button': './src/Button',
+        './react': require.resolve('react'),
+        './reactDOM': require.resolve('react-dom'),
       },
       shared: {
         ...deps,
         react: {
           singleton: true,
           requiredVersion: deps.react,
-          shareScope: "react18"
+          shareScope: "react17"
+
+          // import: 'react', // the "react" package will be used a provided and fallback module
+          // shareKey: 'newReact', // under this name the shared module will be placed in the share scope
+          // shareScope: 'default', // share scope with this name will be used
+          // singleton: true, // only a single version of the shared module is allowed
         },
         "react-dom": {
           singleton: true,
           requiredVersion: deps["react-dom"],
-          shareScope: "react18"
+          shareScope: "react17"
         },
-        // oldReact: {
-        //   import: "react", // the "react" package will be used a provided and fallback module
-        //   shareKey: "oldReact", // under this name the shared module will be placed in the share scope
-        //   shareScope: "legacy", // share scope with this name will be used
-        //   singleton: true, // only a single version of the shared module is allowed
-        // }
+         // reactNew: {
+         //   import: "react", // the "react" package will be used a provided and fallback module
+         //   shareKey: "reactNew", // under this name the shared module will be placed in the share scope
+         //   shareScope: "modern", // share scope with this name will be used
+         //   singleton: true, // only a single version of the shared module is allowed
+         // },
       },
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      app2RemoteEntry: getRemoteEntryUrl(3002),
-      app3RemoteEntry: getRemoteEntryUrl(3003),
     }),
   ],
 };
-
-function getRemoteEntryUrl(port) {
-  const { CODESANDBOX_SSE, HOSTNAME = '' } = process.env;
-
-  // Check if the example is running on codesandbox
-  // https://codesandbox.io/docs/environment
-  if (!CODESANDBOX_SSE) {
-    return `//localhost:${port}/remoteEntry.js`;
-  }
-
-  const parts = HOSTNAME.split('-');
-  const codesandboxId = parts[parts.length - 1];
-
-  return `//${codesandboxId}-${port}.sse.codesandbox.io/remoteEntry.js`;
-}

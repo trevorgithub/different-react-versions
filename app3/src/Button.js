@@ -1,6 +1,6 @@
 import React, { button } from "react";
 
-window.app2reactButton = React;
+window.app3reactButton = React;
 
 const Button = () => {
   const [buttonClickCount, setButtonClickCount] = React.useState(0);
@@ -12,10 +12,10 @@ const Button = () => {
 
   return (
     <div>
-      I'm the React 17 button! {`(React Version: ${React.version} - runtime)`}
+      I'm a 2nd React 17 button! {`(React Version: ${React.version} - runtime)`}
       <button
         onClick={handleClick}
-      >{`Click to increment React 17 counter.  Current: ${buttonClickCount}`}</button>
+      >{`Click to increment 2nd React 17 counter.  Current: ${buttonClickCount}`}</button>
     </div>
   );
 };

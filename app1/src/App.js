@@ -14,7 +14,9 @@ class App extends React.Component {
         <div>{`React version in app1: ${React.version}`}</div>
 
         <Adapter
-          importer={() => import('app2/Button')}
+          reactImporter={() => import('app2/react')}
+          reactDomImporter={() => import('app2/reactDOM')}
+          componentImporter={() => import('app2/Button')}
         >
         </Adapter>
         {/* Below code fails, without using adapter because it uses a hook */}
@@ -23,6 +25,12 @@ class App extends React.Component {
         </React.Suspense> */}
 
         <Button/>
+        <Adapter
+          reactImporter={() => import('app3/react')}
+          reactDomImporter={() => import('app3/reactDOM')}
+          componentImporter={() => import('app3/Button')}
+        >
+        </Adapter>
       </div>
     );
   }

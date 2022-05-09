@@ -41,31 +41,33 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         './Button': './src/Button',
-        './newReact': require.resolve('react'),
-        './newReactDOM': require.resolve('react-dom'),
+        './react': require.resolve('react'),
+        './reactDOM': require.resolve('react-dom'),
       },
-      // shared: {
-      //   ...deps,
-      //   react: {
-      //     // singleton: true,
-      //     // requiredVersion: deps.react,
+      shared: {
+        ...deps,
+        react: {
+          singleton: true,
+          requiredVersion: deps.react,
+          shareScope: "react17"
 
-      //     import: 'react', // the "react" package will be used a provided and fallback module
-      //     shareKey: 'newReact', // under this name the shared module will be placed in the share scope
-      //     shareScope: 'default', // share scope with this name will be used
-      //     singleton: true, // only a single version of the shared module is allowed
-      //   },
-      //   // "react-dom": {
-      //   //   singleton: true,
-      //   //   requiredVersion: deps["react-dom"],
-      //   // },
-      //    // reactNew: {
-      //    //   import: "react", // the "react" package will be used a provided and fallback module
-      //    //   shareKey: "reactNew", // under this name the shared module will be placed in the share scope
-      //    //   shareScope: "modern", // share scope with this name will be used
-      //    //   singleton: true, // only a single version of the shared module is allowed
-      //    // },
-      // },
+          // import: 'react', // the "react" package will be used a provided and fallback module
+          // shareKey: 'newReact', // under this name the shared module will be placed in the share scope
+          // shareScope: 'default', // share scope with this name will be used
+          // singleton: true, // only a single version of the shared module is allowed
+        },
+        "react-dom": {
+          singleton: true,
+          requiredVersion: deps["react-dom"],
+          shareScope: "react17"
+        },
+         // reactNew: {
+         //   import: "react", // the "react" package will be used a provided and fallback module
+         //   shareKey: "reactNew", // under this name the shared module will be placed in the share scope
+         //   shareScope: "modern", // share scope with this name will be used
+         //   singleton: true, // only a single version of the shared module is allowed
+         // },
+      },
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

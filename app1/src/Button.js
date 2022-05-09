@@ -1,6 +1,6 @@
 import React, { button } from "react";
 
-window.reactButton = React;
+window.app1reactButton = React;
 
 const Button = () => {
   const [buttonClickCount, setButtonClickCount] = React.useState(0);
